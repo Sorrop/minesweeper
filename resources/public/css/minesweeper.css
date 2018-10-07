@@ -26,6 +26,8 @@ div.minefield {
     position: relative; }
     div.minefield .tile.stepped {
       background: #ffc04c; }
+      div.minefield .tile.stepped.mine {
+        background: #ff7f50; }
     div.minefield .tile > text {
       position: absolute;
       top: 30%;

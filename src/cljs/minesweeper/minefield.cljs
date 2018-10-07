@@ -145,3 +145,23 @@
     (if (= state "marked")
       (inc marked)
       (dec marked))))
+
+(defn update-game-state
+  [game-state field id sweep?]
+  (let [stepped-mine? (fn [{:keys [state content]}]
+                        (and (= state "stepped")
+                             (= content "mine")))
+        stepped-mines (filter stepped-mine?
+                              (if sweep?
+                                [(get-in field id)]
+                                (map #(get-in field %)
+                                     (retrieve-neighbour-ids id field))))]
+    (if (empty? stepped-mines)
+      game-state
+      "lose")))
+
+(defn reveal-mines [field mines]
+  (reduce (fn [acc id]
+            (assoc-in acc (conj id :state) "stepped"))
+          field
+          mines))

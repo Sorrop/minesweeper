@@ -6,7 +6,9 @@
    [minesweeper.minefield :refer [init-mines sweep-tile
                                   reveal-tiles mark-tile
                                   trust-tile find-mines
-                                  marked-inc-dec]]))
+                                  marked-inc-dec
+                                  update-game-state
+                                  reveal-mines]]))
 
 (re-frame/reg-event-db
  ::initialize-db
@@ -28,12 +30,28 @@
 (re-frame/reg-event-db
  ::sweep
  (fn [db [_ id]]
-   (update db :minefield sweep-tile id)))
+   (let [old (get db :minefield)
+         old-game-state (get db :game-state)
+         new (sweep-tile old id)
+         new-game-state (update-game-state old-game-state
+                                           new
+                                           id
+                                           true)
+         new (if (= "lose" new-game-state)
+               (reveal-mines new (get db :mines))
+               new)]
+     (assoc db
+            :minefield new
+            :game-state new-game-state))))
 
 (re-frame/reg-event-db
  ::reveal
  (fn [db _]
-   (update db :minefield reveal-tiles)))
+   (let [game-state (get db :game-state)]
+     (if-not (#{"end" "lose"} game-state)
+       (-> (update db :minefield reveal-tiles)
+           (assoc :game-state "end"))
+       db))))
 
 (re-frame/reg-event-db
  ::mark-tile
@@ -47,4 +65,16 @@
 (re-frame/reg-event-db
  ::trust-mark
  (fn [db [_ id]]
-   (update db :minefield trust-tile id)))
+   (let [old (get db :minefield)
+         old-game-state (get db :game-state)
+         new (trust-tile old id)
+         new-game-state (update-game-state old-game-state
+                                           new
+                                           id
+                                           false)
+         new (if (= "lose" new-game-state)
+               (reveal-mines new (get db :mines))
+               new)]
+     (assoc db
+            :minefield new
+            :game-state new-game-state))))

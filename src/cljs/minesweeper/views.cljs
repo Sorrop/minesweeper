@@ -20,20 +20,25 @@
            content)]))))
 
 (defn main-panel []
-  (let [minefield (re-frame/subscribe [::subs/minefield])]
+  (let [minefield (re-frame/subscribe [::subs/minefield])
+        game-state (re-frame/subscribe [::subs/game-state])]
     (when (not-empty @minefield)
       [:div.minefield
        (doall
         (for [x (range (count @minefield))
               y (range (count (get @minefield x)))
               :let [tile (get-in @minefield [x y])
-                    t-state (:state tile)]]
+                    t-state (:state tile)
+                    t-content (:content tile)]]
           [:div.tile {:key [x y]
                       :class (when (= t-state "stepped")
-                               t-state)
+                               (if (= t-content "mine")
+                                 (str t-state " " t-content)
+                                 t-state))
                       :on-click (fn [e]
-                                  (when-not (= t-state "stepped")
-                                    (re-frame/dispatch [::events/sweep [x y]])))
+                                  (when (= @game-state "playing")
+                                    (when-not (= t-state "stepped")
+                                      (re-frame/dispatch [::events/sweep [x y]]))))
                       :on-context-menu (fn [e]
                                          (.preventDefault e)
                                          (when-not (= t-state "stepped")
@@ -51,9 +56,12 @@
         game-state (re-frame/subscribe [::subs/game-state])
         {:keys [marked mines]} @score]
     (when (not= @game-state "")
-      [:ul
-       [:li "Mines: " mines]
-       [:li "Marked: " marked]])))
+      [:div.score-view
+       [:ul
+        [:li "Mines: " mines]
+        [:li "Marked: " marked]]
+       (when (= @game-state "lose")
+         [:p "You lost."])])))
 
 (defn app []
   [:div.container

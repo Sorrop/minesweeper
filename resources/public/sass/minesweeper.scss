@@ -33,6 +33,10 @@ div.minefield {
 
         &.stepped {
             background: #ffc04c;
+
+            &.mine {
+                background: #ff7f50;
+            }
         }
 
         > text {

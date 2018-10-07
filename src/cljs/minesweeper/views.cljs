@@ -32,23 +32,35 @@
                       :class (when (= t-state "stepped")
                                t-state)
                       :on-click (fn [e]
-                                  (re-frame/dispatch-sync [::events/sweep [x y]]))
+                                  (when-not (= t-state "stepped")
+                                    (re-frame/dispatch [::events/sweep [x y]])))
                       :on-context-menu (fn [e]
                                          (.preventDefault e)
-                                         (re-frame/dispatch-sync [::events/mark-tile [x y]]))
+                                         (when-not (= t-state "stepped")
+                                           (re-frame/dispatch [::events/mark-tile [x y]])))
                       :on-mouse-down (fn [e]
                                        (let [event (.-nativeEvent e)
                                              button (.-button event)]
                                          (when (= button 1)
-                                           (re-frame/dispatch-sync [::events/trust-mark [x y]]))))}
+                                           (re-frame/dispatch [::events/trust-mark [x y]]))))}
            (render-tile tile)]))
        ])))
+
+(defn score-view []
+  (let [score (re-frame/subscribe [::subs/score])
+        game-state (re-frame/subscribe [::subs/game-state])
+        {:keys [marked mines]} @score]
+    (when (not= @game-state "")
+      [:ul
+       [:li "Mines: " mines]
+       [:li "Marked: " marked]])))
 
 (defn app []
   [:div.container
    [:div.buttons
     [:button {:on-click (fn [_]
-                          (re-frame/dispatch-sync [::events/init-game]))} "New Game"]
+                          (re-frame/dispatch [::events/init-game]))} "New Game"]
     [:button {:on-click (fn [_]
-                          (re-frame/dispatch-sync [::events/reveal]))} "Reveal"]]
-   (main-panel)])
+                          (re-frame/dispatch [::events/reveal]))} "Reveal"]]
+   (main-panel)
+   (score-view)])

@@ -2,4 +2,7 @@
 
 
 (def default-db
-  {:minefield []})
+  {:minefield []
+   :mines #{}
+   :score {}
+   :game-state ""})

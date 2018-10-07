@@ -139,3 +139,9 @@
             {:mines 0
              :found 0}
             ids)))
+
+(defn marked-inc-dec [marked field id]
+  (let [{:keys [state]} (get-in field id)]
+    (if (= state "marked")
+      (inc marked)
+      (dec marked))))

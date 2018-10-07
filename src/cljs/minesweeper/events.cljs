@@ -5,7 +5,8 @@
    [minesweeper.utils :refer [clog]]
    [minesweeper.minefield :refer [init-mines sweep-tile
                                   reveal-tiles mark-tile
-                                  trust-tile]]))
+                                  trust-tile find-mines
+                                  marked-inc-dec]]))
 
 (re-frame/reg-event-db
  ::initialize-db
@@ -15,7 +16,14 @@
 (re-frame/reg-event-db
  ::init-game
  (fn [db _]
-   (assoc db :minefield (init-mines))))
+   (let [minefield (init-mines)
+         mines (find-mines minefield)]
+     (assoc db
+            :minefield minefield
+            :mines mines
+            :score {:mines (count mines)
+                    :marked 0}
+            :game-state "playing"))))
 
 (re-frame/reg-event-db
  ::sweep
@@ -30,7 +38,11 @@
 (re-frame/reg-event-db
  ::mark-tile
  (fn [db [_ id]]
-   (update db :minefield mark-tile id)))
+   (let [old (get db :minefield)
+         new (mark-tile old id)]
+     (-> (assoc db :minefield new)
+         (update-in [:score :marked]
+                    marked-inc-dec new id)))))
 
 (re-frame/reg-event-db
  ::trust-mark

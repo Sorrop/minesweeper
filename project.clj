@@ -4,7 +4,8 @@
                  [reagent "0.7.0"]
                  [re-frame "0.10.5"]]
 
-  :plugins [[lein-cljsbuild "1.1.7"]]
+  :plugins [[lein-cljsbuild "1.1.7"]
+            [lein-sass "0.4.0"]]
 
   :min-lein-version "2.5.3"
 
@@ -25,6 +26,9 @@
     :plugins      [[lein-figwheel "0.5.16"]]}
    :prod { }
    }
+
+  :sass {:src "resources/public/sass"
+         :output-directory "resources/public/css"}
 
   :cljsbuild
   {:builds

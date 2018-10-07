@@ -60,8 +60,10 @@
        [:ul
         [:li "Mines: " mines]
         [:li "Marked: " marked]]
-       (when (= @game-state "lose")
-         [:p "You lost."])])))
+       (condp = @game-state
+         "lose" [:p "You lost."]
+         "win" [:p "You won!"]
+         nil)])))
 
 (defn app []
   [:div.container

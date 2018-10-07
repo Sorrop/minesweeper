@@ -8,7 +8,8 @@
                                   trust-tile find-mines
                                   marked-inc-dec
                                   update-game-state
-                                  reveal-mines]]))
+                                  reveal-mines
+                                  win-condition?]]))
 
 (re-frame/reg-event-db
  ::initialize-db
@@ -48,9 +49,14 @@
  ::reveal
  (fn [db _]
    (let [game-state (get db :game-state)]
-     (if-not (#{"end" "lose"} game-state)
-       (-> (update db :minefield reveal-tiles)
-           (assoc :game-state "end"))
+     (if-not (#{"win" "lose"} game-state)
+       (let [field (get db :minefield)
+             mines (get db :mines)
+             revealed (reveal-tiles field)
+             win? (win-condition? revealed mines)]
+         (assoc db
+                :minefield revealed
+                :game-state (if win? "win" "lose")))
        db))))
 
 (re-frame/reg-event-db

@@ -165,3 +165,9 @@
             (assoc-in acc (conj id :state) "stepped"))
           field
           mines))
+
+(defn win-condition? [field mines]
+  (empty? (filter (fn [id]
+                    (let [tile (get-in field id)]
+                      (not= (:state tile) "marked")))
+                  mines)))

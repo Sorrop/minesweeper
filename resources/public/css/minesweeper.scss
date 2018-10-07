@@ -1,0 +1,59 @@
+body {
+    background-color: #c8cfd6;
+}
+
+div.container {
+    margin: auto;
+
+    div.buttons {
+        display: flex;
+        flex-basis: auto;
+        flex-direction: row;
+        place-content: start space-evenly;
+        width: 300px;
+        margin: 30px auto 30px auto;
+    }
+}
+
+div.minefield {
+    display: grid;
+    grid-column-gap: 2px;
+    grid-row-gap: 2px;
+    grid-template-columns: 50px 50px 50px 50px 50px 50px;
+    width: 300px;
+    margin: auto;
+
+    .tile {
+        background: #ADD8E6;
+        height: 40px;
+        width: 40px;
+        border: ridge black 1px;
+        position: relative;
+
+        &.stepped {
+            background: #ffc04c;
+        }
+
+        > text {
+            position: absolute;
+            top: 30%;
+            left: 40%;
+
+            &.hidden {
+                display: none
+            }
+        }
+
+        > img {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            top: 20%;
+            left: 25%;
+
+            &.hidden {
+                display: none;
+            }
+        }
+    }
+}

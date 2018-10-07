@@ -1,6 +1,5 @@
-(ns minesweeper.db
-  (:require [minesweeper.minefield :refer [init-mines]]))
+(ns minesweeper.db)
 
 
 (def default-db
-  {:mines []})
+  {:minefield []})

@@ -3,6 +3,6 @@
    [re-frame.core :as re-frame]))
 
 (re-frame/reg-sub
- ::mines
+ ::minefield
  (fn [db]
-   (:mines db)))
+   (:minefield db)))

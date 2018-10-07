@@ -83,7 +83,12 @@
              y (range (count (get field x)))]
          [x y])
        (reduce (fn [acc id]
-                 (assoc-in acc (conj id :state) "stepped"))
+                 (let [{:keys [state
+                               content]} (get-in field id)]
+                   (if (and (= content "mine")
+                            (= state "marked"))
+                     acc
+                     (assoc-in acc (conj id :state) "stepped"))))
                field)))
 
 (defn mark-tile [field id]
@@ -118,3 +123,19 @@
                   field)
       (do-trust-tile field neighbours)
       )))
+
+(defn compute-score [field]
+  (let [ids (for [x (range (count field))
+                  y (range (count (get field x)))]
+              [x y])]
+    (reduce (fn [acc id]
+              (let [{:keys [state content]} (get-in field id)]
+                (cond
+                  (and (= content "mine")
+                       (= state "marked")) (-> (update acc :mines inc)
+                                               (update :found inc))
+                  (= content "mine") (update acc :mines inc)
+                  :else acc)))
+            {:mines 0
+             :found 0}
+            ids)))

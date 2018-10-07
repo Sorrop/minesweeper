@@ -20,13 +20,13 @@
            content)]))))
 
 (defn main-panel []
-  (let [mines (re-frame/subscribe [::subs/mines])]
-    (when (not-empty @mines)
+  (let [minefield (re-frame/subscribe [::subs/minefield])]
+    (when (not-empty @minefield)
       [:div.minefield
        (doall
-        (for [x (range (count @mines))
-              y (range (count (get @mines x)))
-              :let [tile (get-in @mines [x y])
+        (for [x (range (count @minefield))
+              y (range (count (get @minefield x)))
+              :let [tile (get-in @minefield [x y])
                     t-state (:state tile)]]
           [:div.tile {:key [x y]
                       :class (when (= t-state "stepped")

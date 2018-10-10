@@ -16,3 +16,13 @@
  ::game-state
  (fn [db]
    (:game-state db)))
+
+(re-frame/reg-sub
+ ::init-difficulty
+ (fn [db]
+   (:init-difficulty db)))
+
+(re-frame/reg-sub
+ ::difficulty
+ (fn [db]
+   (:difficulty db)))

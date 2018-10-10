@@ -2,7 +2,9 @@
 
 
 (def default-db
-  {:minefield []
+  {:init-difficulty "easy"
+   :difficulty "easy"
+   :minefield []
    :mines #{}
    :score {}
    :game-state ""})

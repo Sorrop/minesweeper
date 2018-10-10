@@ -19,10 +19,12 @@
 (re-frame/reg-event-db
  ::init-game
  (fn [db _]
-   (let [minefield (init-mines)
+   (let [difficulty (:difficulty db)
+         minefield (init-mines difficulty)
          mines (find-mines minefield)]
      (assoc db
             :minefield minefield
+            :init-difficulty difficulty 
             :mines mines
             :score {:mines (count mines)
                     :marked 0}
@@ -84,3 +86,8 @@
      (assoc db
             :minefield new
             :game-state new-game-state))))
+
+(re-frame/reg-event-db
+ ::set-difficulty
+ (fn [db [_ difficulty]]
+   (assoc db :difficulty difficulty)))

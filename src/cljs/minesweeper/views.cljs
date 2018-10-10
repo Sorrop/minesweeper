@@ -21,9 +21,10 @@
 
 (defn main-panel []
   (let [minefield (re-frame/subscribe [::subs/minefield])
-        game-state (re-frame/subscribe [::subs/game-state])]
+        game-state (re-frame/subscribe [::subs/game-state])
+        init-difficulty (re-frame/subscribe [::subs/init-difficulty])]
     (when (not-empty @minefield)
-      [:div.minefield
+      [:div.minefield {:class @init-difficulty}
        (doall
         (for [x (range (count @minefield))
               y (range (count (get @minefield x)))
@@ -65,12 +66,44 @@
          "win" [:p "You won!"]
          nil)])))
 
+(defn select-difficulty-view []
+  (let [difficulty (re-frame/subscribe [::subs/difficulty])]
+    (when @difficulty
+      [:fieldset
+       [:legend "Select difficulty"]
+       [:div
+        [:input#easy  {:name "difficulty"
+                       :type "radio"
+                       :value "easy"
+                       :checked (= @difficulty "easy")
+                       :on-change (fn [_] (re-frame/dispatch [::events/set-difficulty "easy"]))}
+         ]
+        [:label {:for "easy"} "Easy"]]
+       [:div
+        [:input#normal {:name "difficulty"
+                        :type "radio"
+                        :value "normal"
+                        :checked (= @difficulty "normal")
+                        :on-change (fn [_] (re-frame/dispatch [::events/set-difficulty "normal"]))} ]
+        [:label {:for "normal"} "Normal"]]
+       [:div
+        [:input#hard {:name "difficulty"
+                      :type "radio"
+                      :value "hard"
+                      :checked (= @difficulty "hard")
+                      :on-change (fn [_]
+                                   (re-frame/dispatch [::events/set-difficulty "hard"]))}]
+        [:label {:for "hard"} "Hard"]]])))
+
 (defn app []
   [:div.container
    [:div.buttons
-    [:button {:on-click (fn [_]
-                          (re-frame/dispatch [::events/init-game]))} "New Game"]
-    [:button {:on-click (fn [_]
-                          (re-frame/dispatch [::events/reveal]))} "Reveal"]]
+    (select-difficulty-view)
+    [:div.button
+     [:button {:on-click (fn [_]
+                           (re-frame/dispatch [::events/init-game]))} "New Game"]]
+    [:div.button
+     [:button {:on-click (fn [_]
+                           (re-frame/dispatch [::events/reveal]))} "Reveal"]]]
    (main-panel)
    (score-view)])

@@ -8,16 +8,25 @@ div.container {
     flex-basis: auto;
     flex-direction: row;
     place-content: start space-evenly;
-    width: 300px;
+    width: 600px;
     margin: 30px auto 30px auto; }
+    div.container div.buttons .button {
+      margin-top: 50px; }
 
 div.minefield {
   display: grid;
-  grid-column-gap: 2px;
-  grid-row-gap: 2px;
-  grid-template-columns: 50px 50px 50px 50px 50px 50px;
-  width: 300px;
+  grid-column-gap: 1px;
+  grid-row-gap: 1px;
   margin: auto; }
+  div.minefield.easy {
+    grid-template-columns: 50px 50px 50px 50px 50px;
+    width: 250px; }
+  div.minefield.normal {
+    grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
+    width: 500px; }
+  div.minefield.hard {
+    grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
+    width: 750px; }
   div.minefield .tile {
     background: #ADD8E6;
     height: 40px;

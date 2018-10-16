@@ -14,9 +14,9 @@
 
 (defn difficulty->parameters [difficulty]
   (condp = difficulty
-    "easy" [[0 0 0 0 0 0 0 0 0 0 0 "mine"] 5]
-    "normal" [[0 0 0 0 "mine"] 10]
-    [[0 0 0 0 "mine"] 15]))
+    "easy" [[0 0 0 0 0 "mine"] [8 8]]
+    "normal" [[0 0 0 0 "mine"] [13 15]]
+    [[0 0 0 0 "mine"] [16 30]]))
 
 
 (defn produce-n-items [f n]
@@ -42,10 +42,10 @@
           [x y])))
 
 (defn init-mines [difficulty]
-  (let [[samples n] (difficulty->parameters difficulty)
+  (let [[samples [n m]] (difficulty->parameters difficulty)
         row-init (fn [] {:content (rand-nth samples)
                          :state "hidden"})
-        initial (produce-n-items #(produce-n-items row-init n) n)
+        initial (produce-n-items #(produce-n-items row-init m) n)
         mines-ids (find-mines initial)
         to-update (mapcat #(retrieve-neighbour-ids % initial :no-mines? true)
                           mines-ids)]

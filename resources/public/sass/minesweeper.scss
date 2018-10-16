@@ -27,24 +27,24 @@ div.minefield {
     margin: auto;
 
     &.easy {
-        grid-template-columns: 50px 50px 50px 50px 50px;
-        width: 250px;
+        grid-template-columns: 20px 20px 20px 20px 20px 20px 20px 20px;
+        width: 160px;
     }
 
     &.normal {
-        grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
-        width: 500px;
+        grid-template-columns: 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px;
+        width: 300px;
     }
 
     &.hard {
-        grid-template-columns: 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px 50px;
-        width: 750px;
+        grid-template-columns: 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px 20px;
+        width: 600px;
     }
 
     .tile {
         background: #ADD8E6;
-        height: 40px;
-        width: 40px;
+        height: 20px;
+        width: 20px;
         border: ridge black 1px;
         position: relative;
 
@@ -58,8 +58,8 @@ div.minefield {
 
         > text {
             position: absolute;
-            top: 30%;
-            left: 40%;
+            top: 10%;
+            left: 20%;
 
             &.hidden {
                 display: none
@@ -68,8 +68,8 @@ div.minefield {
 
         > img {
             position: absolute;
-            width: 25px;
-            height: 25px;
+            width: 15px;
+            height: 15px;
             top: 20%;
             left: 25%;
 
